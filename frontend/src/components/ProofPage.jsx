@@ -119,4 +119,3 @@ function ProofPage() {
 }
 
 export default ProofPage
-

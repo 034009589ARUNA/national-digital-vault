@@ -10,12 +10,27 @@ router.post('/register', [
   body('password').isLength({ min: 6 }),
   body('name').trim().notEmpty(),
   body('role').optional().isIn(['Citizen', 'GovernmentOfficer', 'Institution', 'Auditor', 'Admin']),
-  body('agency').optional().isIn(['BirthDeaths', 'LandRegistry', 'Education', 'Immigration', 'Courts'])
+  body('agency')
+    .optional({ checkFalsy: true })
+    .custom((value, { req }) => {
+      // If role is GovernmentOfficer, agency is required
+      if (req.body.role === 'GovernmentOfficer' && !value) {
+        throw new Error('Agency is required for Government Officers');
+      }
+      // If agency is provided, it must be valid
+      if (value && !['BirthDeaths', 'LandRegistry', 'Education', 'Immigration', 'Courts'].includes(value)) {
+        throw new Error('Invalid agency selected');
+      }
+      return true;
+    })
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ 
+        error: errors.array().map(e => e.msg).join(', '),
+        errors: errors.array()
+      });
     }
 
     const { email, password, name, role = 'Citizen', agency } = req.body;

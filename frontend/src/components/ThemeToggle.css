@@ -1,0 +1,87 @@
+.theme-toggle {
+  position: relative;
+  width: 60px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  transition: transform 0.2s;
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-track {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-input);
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle:hover .theme-toggle-track {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background: var(--bg-card);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle.dark .theme-toggle-thumb {
+  transform: translateX(28px);
+}
+
+.theme-toggle.light .theme-toggle-thumb {
+  transform: translateX(0);
+}
+
+.theme-icon {
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover .theme-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Alternative compact version */
+.theme-toggle-compact {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-input);
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 20px;
+}
+
+.theme-toggle-compact:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: rotate(15deg) scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
