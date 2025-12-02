@@ -84,6 +84,7 @@ router.post('/approve/:documentId', authenticate, authorize('GovernmentOfficer',
 
       // Check if fully verified
       const docData = await contract.getDocument(hashBytes32);
+      // getDocument returns tuple with named outputs: {owner, timestamp, isVerified, approvalCount, requiredApprovals}
       if (docData.isVerified) {
         document.isVerified = true;
       }

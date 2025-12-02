@@ -33,6 +33,59 @@ function computeHash(filePath) {
   return crypto.createHash('sha256').update(fileBuffer).digest('hex');
 }
 
+// Helper function to safely check blockchain for document
+async function checkBlockchain(hashBytes32) {
+  let exists = false;
+  let verified = false;
+  let blockchainOwner = null;
+  
+  try {
+    const result = await contract.verifyDocument(hashBytes32);
+    
+    // Handle different response formats from ethers.js
+    if (Array.isArray(result)) {
+      [exists, verified] = result;
+    } else if (result && typeof result === 'object') {
+      exists = result.exists !== undefined ? result.exists : false;
+      verified = result.verified !== undefined ? result.verified : false;
+    } else {
+      // Unexpected format, default to false
+      exists = false;
+      verified = false;
+    }
+    
+    // If document exists, try to get owner
+    if (exists) {
+      try {
+        const docData = await contract.getDocument(hashBytes32);
+        if (docData) {
+          // Handle both tuple and object responses
+          if (typeof docData === 'object' && docData.owner) {
+            blockchainOwner = docData.owner;
+          } else if (Array.isArray(docData) && docData[0]) {
+            blockchainOwner = docData[0];
+          }
+        }
+      } catch (error) {
+        console.error('Error getting document owner:', error.message);
+        // Continue without owner info
+      }
+    }
+  } catch (error) {
+    // Document doesn't exist on blockchain or contract call failed
+    // This is expected for documents that haven't been uploaded
+    if (error.code === 'BAD_DATA' || error.message.includes('decode')) {
+      console.log(`Document hash not found on blockchain (expected for new documents)`);
+    } else {
+      console.error('Blockchain verification error:', error.message);
+    }
+    exists = false;
+    verified = false;
+  }
+  
+  return { exists, verified, owner: blockchainOwner };
+}
+
 // Initialize blockchain connection
 let contract = null;
 let provider = null;
@@ -69,17 +122,8 @@ router.post('/file', upload.single('document'), async (req, res) => {
     // Clean up temp file
     fs.unlinkSync(filePath);
 
-    // Check blockchain
-    const [exists, verified] = await contract.verifyDocument(hashBytes32);
-    let blockchainOwner = null;
-    if (exists) {
-      try {
-        const docData = await contract.getDocument(hashBytes32);
-        blockchainOwner = docData.owner;
-      } catch (error) {
-        console.error('Error getting document owner:', error);
-      }
-    }
+    // Check blockchain with proper error handling
+    const blockchainResult = await checkBlockchain(hashBytes32);
 
     // Check MongoDB
     const dbDocument = await Document.findOne({ hash });
@@ -88,9 +132,9 @@ router.post('/file', upload.single('document'), async (req, res) => {
       hash: hash,
       verified: false,
       blockchain: {
-        exists: exists,
-        verified: verified,
-        owner: blockchainOwner
+        exists: blockchainResult.exists,
+        verified: blockchainResult.verified,
+        owner: blockchainResult.owner
       },
       database: {
         exists: !!dbDocument,
@@ -103,7 +147,7 @@ router.post('/file', upload.single('document'), async (req, res) => {
     };
 
     // Document is verified if it exists on both blockchain and database and is verified
-    if (exists && verified && dbDocument) {
+    if (blockchainResult.exists && blockchainResult.verified && dbDocument) {
       verificationResult.verified = true;
     }
 
@@ -131,17 +175,8 @@ router.get('/hash/:hash', async (req, res) => {
       return res.status(500).json({ error: 'Blockchain not initialized' });
     }
 
-    // Check blockchain
-    const [exists, verified] = await contract.verifyDocument(hashBytes32);
-    let blockchainOwner = null;
-    if (exists) {
-      try {
-        const docData = await contract.getDocument(hashBytes32);
-        blockchainOwner = docData.owner;
-      } catch (error) {
-        console.error('Error getting document owner:', error);
-      }
-    }
+    // Check blockchain with proper error handling
+    const blockchainResult = await checkBlockchain(hashBytes32);
 
     // Check MongoDB
     const dbDocument = await Document.findOne({ hash });
@@ -150,9 +185,9 @@ router.get('/hash/:hash', async (req, res) => {
       hash: hash,
       verified: false,
       blockchain: {
-        exists: exists,
-        verified: verified,
-        owner: blockchainOwner
+        exists: blockchainResult.exists,
+        verified: blockchainResult.verified,
+        owner: blockchainResult.owner
       },
       database: {
         exists: !!dbDocument,
@@ -165,7 +200,7 @@ router.get('/hash/:hash', async (req, res) => {
     };
 
     // Document is verified if it exists on both blockchain and database and is verified
-    if (exists && verified && dbDocument) {
+    if (blockchainResult.exists && blockchainResult.verified && dbDocument) {
       verificationResult.verified = true;
     }
 
@@ -177,4 +212,3 @@ router.get('/hash/:hash', async (req, res) => {
 });
 
 module.exports = router;
-

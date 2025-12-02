@@ -1,110 +1,126 @@
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import api from '../api/api';
-import './UploadForm.css';
+import { useState } from "react"
+import { useAuth } from "../context/AuthContext"
+import api from "../api/api"
+import Toast from "./Toast"
+import DocumentPreview from "./DocumentPreview"
+import SuccessAnimation from "./SuccessAnimation"
+import "./UploadForm.css"
 
 function UploadForm() {
-  const { isAuthenticated } = useAuth();
-  const [file, setFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+  const { isAuthenticated } = useAuth()
+  const [file, setFile] = useState(null)
+  const [uploading, setUploading] = useState(false)
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState(null)
+  const [toast, setToast] = useState(null)
   const [formData, setFormData] = useState({
-    documentType: 'Other',
+    documentType: "Other",
     requiredApprovals: 0,
     encrypt: false,
-    metadataName: '',
-    metadataDescription: '',
-    skipAICheck: false
-  });
-  const [aiCheckResult, setAiCheckResult] = useState(null);
-  const [checkingAI, setCheckingAI] = useState(false);
+    metadataName: "",
+    metadataDescription: "",
+    skipAICheck: false,
+  })
+  const [aiCheckResult, setAiCheckResult] = useState(null)
+  const [checkingAI, setCheckingAI] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-    setError(null);
-    setResult(null);
-    setAiCheckResult(null);
-    
-    if (selectedFile && formData.metadataName === '') {
-      setFormData({ ...formData, metadataName: selectedFile.name });
+    const selectedFile = e.target.files[0]
+    setFile(selectedFile)
+    setError(null)
+    setResult(null)
+    setAiCheckResult(null)
+
+    if (selectedFile && formData.metadataName === "") {
+      setFormData({ ...formData, metadataName: selectedFile.name })
     }
-  };
+  }
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
-    });
-  };
+      [name]: type === "checkbox" ? checked : value,
+    })
+  }
 
   const performAICheck = async (file) => {
-    if (formData.skipAICheck) return null;
-    
-    setCheckingAI(true);
+    if (formData.skipAICheck) return null
+
+    setCheckingAI(true)
     try {
       // In a real implementation, this would call a backend endpoint
       // For now, we'll simulate or the backend will handle it
-      return null;
+      return null
     } catch (error) {
-      console.error('AI check error:', error);
-      return null;
+      console.error("AI check error:", error)
+      return null
     } finally {
-      setCheckingAI(false);
+      setCheckingAI(false)
     }
-  };
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+    e.preventDefault()
+
     if (!isAuthenticated) {
-      setError('Please login to upload documents');
-      return;
-    }
-    
-    if (!file) {
-      setError('Please select a file');
-      return;
+      const errorMsg = "Please login to upload documents"
+      setError(errorMsg)
+      setToast({ message: errorMsg, type: "warning" })
+      return
     }
 
-    setUploading(true);
-    setError(null);
-    setResult(null);
+    if (!file) {
+      const errorMsg = "Please select a file"
+      setError(errorMsg)
+      setToast({ message: errorMsg, type: "warning" })
+      return
+    }
+
+    setUploading(true)
+    setError(null)
+    setResult(null)
 
     try {
-      const uploadFormData = new FormData();
-      uploadFormData.append('document', file);
-      uploadFormData.append('documentType', formData.documentType);
-      uploadFormData.append('requiredApprovals', formData.requiredApprovals);
-      uploadFormData.append('encrypt', formData.encrypt);
-      uploadFormData.append('metadataName', formData.metadataName);
-      uploadFormData.append('metadataDescription', formData.metadataDescription);
-      uploadFormData.append('skipAICheck', formData.skipAICheck);
+      const uploadFormData = new FormData()
+      uploadFormData.append("document", file)
+      uploadFormData.append("documentType", formData.documentType)
+      uploadFormData.append("requiredApprovals", formData.requiredApprovals)
+      uploadFormData.append("encrypt", formData.encrypt)
+      uploadFormData.append("metadataName", formData.metadataName)
+      uploadFormData.append("metadataDescription", formData.metadataDescription)
+      uploadFormData.append("skipAICheck", formData.skipAICheck)
 
-      const response = await api.post('/upload', uploadFormData, {
+      const response = await api.post("/upload", uploadFormData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+          "Content-Type": "multipart/form-data",
+        },
+      })
 
-      setResult(response.data);
-      setAiCheckResult(response.data.document?.aiCheck);
-      setFile(null);
-      e.target.reset();
+      setResult(response.data)
+      setAiCheckResult(response.data.document?.aiCheck)
+      setToast({ message: "Document uploaded successfully!", type: "success" })
+      setShowSuccess(true)
+      setFile(null)
+      e.target.reset()
     } catch (err) {
-      setError(err.response?.data?.error || 'Upload failed');
+      const errorMsg = err.response?.data?.error || "Upload failed"
+      setError(errorMsg)
+      setToast({ message: errorMsg, type: "error" })
       if (err.response?.data?.aiCheck) {
-        setAiCheckResult(err.response.data.aiCheck);
+        setAiCheckResult(err.response.data.aiCheck)
       }
     } finally {
-      setUploading(false);
+      setUploading(false)
     }
-  };
+  }
 
   return (
     <div className="upload-container">
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <SuccessAnimation show={showSuccess} onComplete={() => setShowSuccess(false)} />
+
       <div className="card">
         <h1>Upload Document</h1>
         <p className="subtitle">Securely store your official documents on the blockchain</p>
@@ -117,26 +133,17 @@ function UploadForm() {
 
         <form onSubmit={handleSubmit} className="upload-form">
           <div className="file-input-wrapper">
-            <input
-              type="file"
-              id="file"
-              onChange={handleFileChange}
-              className="file-input"
-              disabled={uploading}
-            />
+            <input type="file" id="file" onChange={handleFileChange} className="file-input" disabled={uploading} />
             <label htmlFor="file" className="file-label">
-              {file ? file.name : 'Choose a file...'}
+              {file ? file.name : "Choose a file..."}
             </label>
           </div>
 
+          {file && <DocumentPreview file={file} />}
+
           <div className="form-group">
             <label>Document Type</label>
-            <select
-              name="documentType"
-              value={formData.documentType}
-              onChange={handleChange}
-              className="form-control"
-            >
+            <select name="documentType" value={formData.documentType} onChange={handleChange} className="form-control">
               <option value="Other">Other</option>
               <option value="BirthCertificate">Birth Certificate</option>
               <option value="DeathCertificate">Death Certificate</option>
@@ -187,34 +194,20 @@ function UploadForm() {
 
           <div className="form-group checkbox-group">
             <label>
-              <input
-                type="checkbox"
-                name="encrypt"
-                checked={formData.encrypt}
-                onChange={handleChange}
-              />
+              <input type="checkbox" name="encrypt" checked={formData.encrypt} onChange={handleChange} />
               Encrypt document before upload (AES-256)
             </label>
           </div>
 
           <div className="form-group checkbox-group">
             <label>
-              <input
-                type="checkbox"
-                name="skipAICheck"
-                checked={formData.skipAICheck}
-                onChange={handleChange}
-              />
+              <input type="checkbox" name="skipAICheck" checked={formData.skipAICheck} onChange={handleChange} />
               Skip AI authenticity pre-check
             </label>
           </div>
 
-          <button 
-            type="submit" 
-            className="submit-btn"
-            disabled={uploading || !file || !isAuthenticated}
-          >
-            {uploading ? 'Uploading...' : 'Upload & Store on Blockchain'}
+          <button type="submit" className="submit-btn" disabled={uploading || !file || !isAuthenticated}>
+            {uploading ? "Uploading..." : "Upload & Store on Blockchain"}
           </button>
         </form>
 
@@ -225,10 +218,14 @@ function UploadForm() {
         )}
 
         {aiCheckResult && (
-          <div className={`ai-check-result ${aiCheckResult.passed ? 'passed' : 'failed'}`}>
+          <div className={`ai-check-result ${aiCheckResult.passed ? "passed" : "failed"}`}>
             <h4>AI Pre-Check Results</h4>
-            <p><strong>Status:</strong> {aiCheckResult.passed ? '✅ Passed' : '❌ Failed'}</p>
-            <p><strong>Confidence:</strong> {(aiCheckResult.confidence * 100).toFixed(1)}%</p>
+            <p>
+              <strong>Status:</strong> {aiCheckResult.passed ? "✅ Passed" : "❌ Failed"}
+            </p>
+            <p>
+              <strong>Confidence:</strong> {(aiCheckResult.confidence * 100).toFixed(1)}%
+            </p>
             {aiCheckResult.issues.length > 0 && (
               <div>
                 <strong>Issues:</strong>
@@ -252,22 +249,29 @@ function UploadForm() {
           </div>
         )}
 
-        {error && (
-          <div className="alert alert-error">
-            {error}
-          </div>
-        )}
+        {error && <div className="alert alert-error">{error}</div>}
 
         {result && (
           <div className="alert alert-success">
             <h3>✅ Upload Successful!</h3>
             <div className="result-details">
-              <p><strong>Filename:</strong> {result.document.filename}</p>
-              <p><strong>Hash:</strong> <code>{result.document.hash}</code></p>
-              <p><strong>Transaction Hash:</strong> <code>{result.document.txHash}</code></p>
-              <p><strong>Document Type:</strong> {result.document.documentType}</p>
-              <p><strong>Required Approvals:</strong> {result.document.requiredApprovals}</p>
-              <p><strong>Verification URL:</strong> 
+              <p>
+                <strong>Filename:</strong> {result.document.filename}
+              </p>
+              <p>
+                <strong>Hash:</strong> <code>{result.document.hash}</code>
+              </p>
+              <p>
+                <strong>Transaction Hash:</strong> <code>{result.document.txHash}</code>
+              </p>
+              <p>
+                <strong>Document Type:</strong> {result.document.documentType}
+              </p>
+              <p>
+                <strong>Required Approvals:</strong> {result.document.requiredApprovals}
+              </p>
+              <p>
+                <strong>Verification URL:</strong>
                 <a href={result.document.verificationUrl} target="_blank" rel="noopener noreferrer">
                   {result.document.verificationUrl}
                 </a>
@@ -280,17 +284,15 @@ function UploadForm() {
                 </p>
               )}
               <div className="action-buttons">
-                <a 
+                <a
                   href={`/api/upload/certificate/${result.document.id}`}
                   className="btn btn-primary"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Download PDF Certificate
                 </a>
-                <a 
-                  href={result.document.verificationUrl}
-                  className="btn btn-secondary"
-                >
+                <a href={result.document.verificationUrl} className="btn btn-secondary">
                   View Verification Page
                 </a>
               </div>
@@ -299,7 +301,7 @@ function UploadForm() {
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default UploadForm;
+export default UploadForm
