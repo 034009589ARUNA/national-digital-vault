@@ -1,0 +1,4 @@
+# This directory will contain the contract ABI after deployment
+# The DocVault.json file will be generated automatically when you run:
+# cd blockchain && npm run deploy
+

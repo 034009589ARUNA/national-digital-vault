@@ -1,0 +1,159 @@
+.proof-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 2rem 0;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
+
+.verification-result {
+  padding: 2rem;
+  border-radius: 12px;
+  border: 3px solid;
+}
+
+.verification-result.verified {
+  background: #f0fdf4;
+  border-color: #22c55e;
+}
+
+.verification-result.not-verified {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.status-icon {
+  font-size: 5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.result-header h1 {
+  font-size: 2.5rem;
+  margin: 0.5rem 0;
+}
+
+.verification-result.verified .result-header h1 {
+  color: #22c55e;
+}
+
+.verification-result.not-verified .result-header h1 {
+  color: #ef4444;
+}
+
+.status-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.qr-section {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  margin: 2rem 0;
+  border: 2px dashed #e0e0e0;
+}
+
+.qr-label {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.proof-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.detail-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.detail-section h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.detail-section code {
+  display: block;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  word-break: break-all;
+  margin-top: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.detail-section p {
+  margin: 0.75rem 0;
+  color: #555;
+  line-height: 1.6;
+}
+
+.status-ok {
+  color: #22c55e;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.status-fail {
+  color: #ef4444;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.tx-note {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.alert-error {
+  background: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+@media (max-width: 768px) {
+  .result-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .status-icon {
+    font-size: 3rem;
+  }
+  
+  .qr-section {
+    padding: 1rem;
+  }
+}
+

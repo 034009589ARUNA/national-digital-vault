@@ -1,0 +1,20 @@
+{
+  "name": "national-digital-vault",
+  "version": "1.0.0",
+  "description": "National Digital Document Vault - Blockchain-based document storage and verification system",
+  "scripts": {
+    "install:all": "cd blockchain && npm install && cd ../backend && npm install && cd ../frontend && npm install",
+    "setup": "npm run install:all"
+  },
+  "keywords": [
+    "blockchain",
+    "document-vault",
+    "ethereum",
+    "hardhat",
+    "react",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+
