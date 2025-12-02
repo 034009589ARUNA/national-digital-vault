@@ -1,0 +1,135 @@
+.logo-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.logo-link.clickable {
+  cursor: pointer;
+}
+
+.logo-link:hover {
+  transform: translateY(-2px);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-icon {
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.2));
+  transition: all 0.3s ease;
+}
+
+.logo-link:hover .logo-icon {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 12px rgba(16, 185, 129, 0.3));
+}
+
+.logo-shield {
+  transition: all 0.3s ease;
+}
+
+.logo-link:hover .logo-shield {
+  transform: translateY(-1px);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.logo-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.logo-tagline {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Size variants */
+.logo-default .logo-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.logo-small .logo-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.logo-small .logo-brand {
+  font-size: 1rem;
+}
+
+.logo-small .logo-tagline {
+  font-size: 0.6rem;
+}
+
+.logo-large .logo-icon {
+  width: 80px;
+  height: 80px;
+}
+
+.logo-large .logo-brand {
+  font-size: 2rem;
+}
+
+.logo-large .logo-tagline {
+  font-size: 0.875rem;
+}
+
+/* Animation for chain links */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.logo-chain {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.logo-chain:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo-tagline {
+    display: none;
+  }
+  
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .logo-brand {
+    font-size: 1rem;
+  }
+}
+
+

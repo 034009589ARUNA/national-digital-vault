@@ -1,0 +1,148 @@
+=== 3-MINUTE DEMO VIDEO SCRIPT ===
+DocVault - National Digital Document Vault
+
+[TIMING: 0:00 - 0:15] OPENING HOOK
+─────────────────────────────────────
+"What happens when fire destroys your family's only property deed? 
+Or your degree certificate is lost forever? 
+
+DocVault solves this critical problem with blockchain-verified 
+digital document storage that protects your most important 
+documents forever."
+
+[VISUAL: Show landing page, statistics, smooth pan]
+
+
+[TIMING: 0:15 - 0:30] PROBLEM STATEMENT
+─────────────────────────────────────
+"Traditional paper documents are fragile. They can be lost, 
+stolen, or destroyed in disasters. 
+
+Citizens face identity crises when originals are missing. 
+How can you prove your qualifications if your degree is lost?
+
+We need a secure, immutable solution - and that's exactly 
+what DocVault provides."
+
+[VISUAL: Split screen or transition showing problem vs solution]
+
+
+[TIMING: 0:30 - 1:00] UPLOAD DEMO
+─────────────────────────────────────
+"Let me show you how it works. I'll upload a birth certificate.
+
+Notice the document preview - we verify the file before upload.
+[PAUSE - show preview feature]
+
+Once submitted, our AI checks for authenticity, then the document 
+hash is stored immutably on the blockchain. 
+
+[CLICK UPLOAD]
+
+Here's the success animation [WAIT for confetti], and the blockchain 
+transaction confirmation. Your document is now permanently protected."
+
+[VISUAL: 
+- Navigate to upload page
+- Select document
+- Show preview (highlight!)
+- Fill details
+- Upload
+- Show success animation
+- Show transaction hash]
+
+
+[TIMING: 1:00 - 1:30] VERIFICATION DEMO
+─────────────────────────────────────
+"Now let's verify a document. I can upload the file or scan 
+this QR code. [SHOW QR CODE]
+
+The system checks both the blockchain and our database to 
+confirm authenticity.
+
+[SHOW VERIFICATION PROCESS]
+
+Here's the verification result - fully verified with blockchain 
+proof. The proof page shows complete transaction history and 
+immutable verification status."
+
+[VISUAL:
+- Navigate to verify page
+- Show QR code option
+- Upload document
+- Show verification process
+- Display result
+- Show proof page with blockchain details]
+
+
+[TIMING: 1:30 - 2:00] DASHBOARD & ANALYTICS
+─────────────────────────────────────
+"Users can view all their documents in their personalized dashboard. 
+
+See these statistics - total documents, verification rates, and 
+document type distribution. [HIGHLIGHT STATS]
+
+The activity feed shows recent actions, and interactive charts 
+visualize document data. Everything you need in one place."
+
+[VISUAL:
+- Navigate to dashboard
+- Highlight statistics cards
+- Show charts
+- Show activity feed
+- Scroll through document list]
+
+
+[TIMING: 2:00 - 2:30] TECHNICAL HIGHLIGHTS
+─────────────────────────────────────
+"Technically, DocVault is a full-stack application built with 
+React, Node.js, and MongoDB. 
+
+The blockchain layer uses Ethereum smart contracts for immutability. 
+[SHOW blockchain transaction or contract interaction]
+
+Documents are encrypted with AES-256 before storage, and we use 
+AI for pre-verification. The system supports multi-signature 
+government approvals and role-based access control."
+
+[VISUAL:
+- Show architecture (simple diagram if available)
+- Highlight blockchain transaction
+- Show encryption/security features
+- Quick code view or API call (optional)]
+
+
+[TIMING: 2:30 - 3:00] IMPACT & FUTURE
+─────────────────────────────────────
+"DocVault solves a real problem affecting millions of people 
+worldwide. It's scalable, secure, and production-ready.
+
+Future enhancements include mobile apps for offline verification, 
+multi-language support, and integration with government systems. 
+
+This could transform how we protect our most important documents 
+- making them secure, accessible, and permanent."
+
+[VISUAL:
+- Return to landing page
+- Show key features again
+- End with logo/statistics
+- Fade out or clear ending]
+
+
+[END: 3:00]
+─────────────────────────────────────
+"Thank you for watching!"
+
+[VISUAL: Logo + website/social links]
+
+
+=== KEY POINTS TO REMEMBER ===
+✓ Speak clearly and confidently
+✓ Don't rush - smooth movements
+✓ Pause at key features
+✓ Let the app do the talking
+✓ Show, don't tell
+✓ Be enthusiastic but professional
+✓ Keep to 3 minutes (slightly under is fine)
+
